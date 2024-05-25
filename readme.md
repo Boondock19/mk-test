@@ -371,3 +371,39 @@ JIT:
   Options: Inlining false, Optimization false, Expressions true, Deforming true
   Timing: Generation 2.250 ms, Inlining 0.000 ms, Optimization 1.293 ms, Emission 64.238 ms, Total 67.781 ms
 Execution Time: 17122.477 ms
+
+
+-2 con index en la tabla tickets con el campo ticket_no tipo hash
+
+Gather Merge  (cost=168330.36..206183.41 rows=324432 width=62) (actual time=15410.887..16138.313 rows=3239758 loops=1)
+  Workers Planned: 2
+  Workers Launched: 2
+  ->  Sort  (cost=167330.34..167735.88 rows=162216 width=62) (actual time=15377.109..15466.818 rows=1079919 loops=3)
+        Sort Key: f.scheduled_departure DESC
+        Sort Method: external merge  Disk: 82176kB
+        Worker 0:  Sort Method: external merge  Disk: 82728kB
+        Worker 1:  Sort Method: external merge  Disk: 81760kB
+        ->  Nested Loop  (cost=4231.74..147192.03 rows=162216 width=62) (actual time=50.551..14333.320 rows=1079919 loops=3)
+              Join Filter: (t.ticket_no = tf.ticket_no)
+              ->  Nested Loop  (cost=4231.18..106919.15 rows=57021 width=70) (actual time=50.496..3954.522 rows=370516 loops=3)
+                    ->  Parallel Hash Join  (cost=4231.18..104203.42 rows=57021 width=33) (actual time=50.466..1114.994 rows=370516 loops=3)
+                          Hash Cond: (bp.flight_id = f.flight_id)
+                          ->  Parallel Seq Scan on boarding_passes bp  (cost=0.00..91303.22 rows=3302422 width=25) (actual time=0.026..467.883 rows=2641937 loops=3)
+                          ->  Parallel Hash  (cost=4203.90..4203.90 rows=2182 width=16) (actual time=45.213..45.214 rows=1320 loops=3)
+                                Buckets: 4096  Batches: 1  Memory Usage: 288kB
+                                ->  Parallel Seq Scan on flights f  (cost=0.00..4203.90 rows=2182 width=16) (actual time=28.830..42.172 rows=1320 loops=3)
+                                      Filter: (aircraft_code = '773'::bpchar)
+                                      Rows Removed by Filter: 70302
+                    ->  Index Scan using idx_ticket_no on tickets t  (cost=0.00..0.05 rows=1 width=37) (actual time=0.007..0.007 rows=1 loops=1111547)
+                          Index Cond: (ticket_no = bp.ticket_no)
+                          Rows Removed by Index Recheck: 0
+              ->  Index Scan using ticket_flights_pkey on ticket_flights tf  (cost=0.56..0.67 rows=3 width=20) (actual time=0.016..0.026 rows=3 loops=1111547)
+                    Index Cond: (ticket_no = bp.ticket_no)
+Planning Time: 0.784 ms
+JIT:
+  Functions: 75
+  Options: Inlining false, Optimization false, Expressions true, Deforming true
+  Timing: Generation 2.176 ms, Inlining 0.000 ms, Optimization 1.137 ms, Emission 80.770 ms, Total 84.084 ms
+Execution Time: 16242.642 ms
+
+mejoro aprox 800 ms
