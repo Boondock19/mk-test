@@ -9,6 +9,16 @@ SELECT TRUNC(AVG(pg_column_size(airport_name)),2)
   AS avg_attr_size
   FROM bookings.boarding_passes;
 
+- Usando el query se obtuvo la informacion de cada tabla y el tipo de dato sus atributos.
+  SELECT 
+  column_name, 
+  data_type 
+FROM 
+  information_schema.columns 
+WHERE 
+  table_schema = 'bookings' AND 
+  table_name = 'tickets';
+
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|airports_data|timezone|15|
