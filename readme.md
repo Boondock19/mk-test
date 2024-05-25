@@ -117,6 +117,12 @@ actual_arrival 8
 |bookings|seats|seat_no|3|
 |bookings|seats|fare_conditions|8|
 
+avg_aircraft_code: 4
+avg_seat_no: 3.75
+avg_fare_conditions: 8.11
+
+
+
 
 
 |column_name|data_type|
@@ -134,6 +140,10 @@ actual_arrival 8
 |bookings|ticket_flights|fare_conditions|8|
 |bookings|ticket_flights|amount|6|
 
+avg_ticket_no: 14
+avg_flight_id: 4
+avg_fare_conditions: 8.1
+avg_amount: 6.31
 
 
 |column_name|data_type|
@@ -152,6 +162,13 @@ actual_arrival 8
 |bookings|tickets|passenger_id|12|
 |bookings|tickets|passenger_name|16|
 |bookings|tickets|contact_data|55|
+
+
+avg_ticket_no: 14
+avg_book_ref: 7
+avg_passenger_id: 12
+avg_passenger_name: 16.12
+avg_contact_data: 55.48
 
 
 |column_name|data_type|
