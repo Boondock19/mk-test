@@ -281,3 +281,93 @@ FROM bookings.boarding_passes bp
 GROUP BY boarding_no 
 ORDER BY count ASC
 LIMIT 1
+
+
+4.1
+## QUERIES PRIMERA CONSULTA 
+
+EXPLAIN ANALIZE de la consulta original
+
+Gather Merge  (cost=192880.50..230733.54 rows=324432 width=62) (actual time=16212.126..16929.085 rows=3239758 loops=1)
+  Workers Planned: 2
+  Workers Launched: 2
+  ->  Sort  (cost=191880.48..192286.02 rows=162216 width=62) (actual time=16179.923..16265.465 rows=1079919 loops=3)
+        Sort Key: f.scheduled_departure DESC
+        Sort Method: external merge  Disk: 82160kB
+        Worker 0:  Sort Method: external merge  Disk: 82392kB
+        Worker 1:  Sort Method: external merge  Disk: 82128kB
+        ->  Nested Loop  (cost=4232.17..171742.16 rows=162216 width=62) (actual time=48.882..15187.182 rows=1079919 loops=3)
+              Join Filter: (t.ticket_no = tf.ticket_no)
+              ->  Nested Loop  (cost=4231.61..131469.29 rows=57021 width=70) (actual time=48.851..5817.664 rows=370516 loops=3)
+                    ->  Parallel Hash Join  (cost=4231.18..104203.42 rows=57021 width=33) (actual time=48.813..1124.621 rows=370516 loops=3)
+                          Hash Cond: (bp.flight_id = f.flight_id)
+                          ->  Parallel Seq Scan on boarding_passes bp  (cost=0.00..91303.22 rows=3302422 width=25) (actual time=0.024..490.781 rows=2641937 loops=3)
+                          ->  Parallel Hash  (cost=4203.90..4203.90 rows=2182 width=16) (actual time=42.268..42.270 rows=1320 loops=3)
+                                Buckets: 4096  Batches: 1  Memory Usage: 256kB
+                                ->  Parallel Seq Scan on flights f  (cost=0.00..4203.90 rows=2182 width=16) (actual time=26.359..41.240 rows=1320 loops=3)
+                                      Filter: (aircraft_code = '773'::bpchar)
+                                      Rows Removed by Filter: 70302
+                    ->  Index Scan using tickets_pkey on tickets t  (cost=0.43..0.48 rows=1 width=37) (actual time=0.012..0.012 rows=1 loops=1111547)
+                          Index Cond: (ticket_no = bp.ticket_no)
+              ->  Index Scan using ticket_flights_pkey on ticket_flights tf  (cost=0.56..0.67 rows=3 width=20) (actual time=0.014..0.024 rows=3 loops=1111547)
+                    Index Cond: (ticket_no = bp.ticket_no)
+Planning Time: 0.704 ms
+JIT:
+  Functions: 75
+  Options: Inlining false, Optimization false, Expressions true, Deforming true
+  Timing: Generation 2.226 ms, Inlining 0.000 ms, Optimization 1.132 ms, Emission 77.944 ms, Total 81.302 ms
+Execution Time: 17032.142 ms
+
+- 1 IDEA mover el where al principio de la consulta para que ocurra un factor
+de correccion de x valor y luego ocurran los joins 
+
+EXPLAIN ANALYZE 
+SELECT
+f.aircraft_code,
+f.scheduled_departure,
+bp.boarding_no,
+bp.seat_no,
+t.passenger_name,
+t.book_ref,
+tf.ticket_no,
+tf.amount
+FROM (SELECT * FROM bookings.flights f WHERE
+f.aircraft_code = '773') AS f
+JOIN
+boarding_passes bp ON bp.flight_id = f.flight_id
+JOIN
+tickets t ON t.ticket_no = bp.ticket_no
+JOIN
+ticket_flights tf ON tf.ticket_no = t.ticket_no
+ORDER BY
+f.scheduled_departure DESC;
+
+Gather Merge  (cost=192880.50..230733.54 rows=324432 width=62) (actual time=16311.649..17019.712 rows=3239758 loops=1)
+  Workers Planned: 2
+  Workers Launched: 2
+  ->  Sort  (cost=191880.48..192286.02 rows=162216 width=62) (actual time=16261.205..16345.677 rows=1079919 loops=3)
+        Sort Key: f.scheduled_departure DESC
+        Sort Method: external merge  Disk: 82480kB
+        Worker 0:  Sort Method: external merge  Disk: 82104kB
+        Worker 1:  Sort Method: external merge  Disk: 82072kB
+        ->  Nested Loop  (cost=4232.17..171742.16 rows=162216 width=62) (actual time=48.298..15282.031 rows=1079919 loops=3)
+              Join Filter: (t.ticket_no = tf.ticket_no)
+              ->  Nested Loop  (cost=4231.61..131469.29 rows=57021 width=70) (actual time=48.257..5768.732 rows=370516 loops=3)
+                    ->  Parallel Hash Join  (cost=4231.18..104203.42 rows=57021 width=33) (actual time=48.179..1128.649 rows=370516 loops=3)
+                          Hash Cond: (bp.flight_id = f.flight_id)
+                          ->  Parallel Seq Scan on boarding_passes bp  (cost=0.00..91303.22 rows=3302422 width=25) (actual time=0.028..477.868 rows=2641937 loops=3)
+                          ->  Parallel Hash  (cost=4203.90..4203.90 rows=2182 width=16) (actual time=35.443..35.445 rows=1320 loops=3)
+                                Buckets: 4096  Batches: 1  Memory Usage: 256kB
+                                ->  Parallel Seq Scan on flights f  (cost=0.00..4203.90 rows=2182 width=16) (actual time=13.160..29.418 rows=1320 loops=3)
+                                      Filter: (aircraft_code = '773'::bpchar)
+                                      Rows Removed by Filter: 70302
+                    ->  Index Scan using tickets_pkey on tickets t  (cost=0.43..0.48 rows=1 width=37) (actual time=0.012..0.012 rows=1 loops=1111547)
+                          Index Cond: (ticket_no = bp.ticket_no)
+              ->  Index Scan using ticket_flights_pkey on ticket_flights tf  (cost=0.56..0.67 rows=3 width=20) (actual time=0.015..0.024 rows=3 loops=1111547)
+                    Index Cond: (ticket_no = bp.ticket_no)
+Planning Time: 0.732 ms
+JIT:
+  Functions: 75
+  Options: Inlining false, Optimization false, Expressions true, Deforming true
+  Timing: Generation 2.250 ms, Inlining 0.000 ms, Optimization 1.293 ms, Emission 64.238 ms, Total 67.781 ms
+Execution Time: 17122.477 ms
