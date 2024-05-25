@@ -182,3 +182,24 @@ avg_contact_data: 55.48
 
 
 FALTA aircrafts_data
+
+
+## Query para obtener la distribución de valores en una columna de una tabla
+
+SELECT DISTINCT(boarding_no), 
+COUNT(*),
+(SELECT COUNT(*) FROM bookings.boarding_passes bp ) AS cardinality, 
+COUNT(*) * 1.0 / (SELECT COUNT(*) FROM bookings.boarding_passes bp ) * 100 AS percentage
+FROM bookings.boarding_passes bp 
+GROUP BY boarding_no 
+
+## QUERY PARA OBTENER DISTRIBUCION DE COLUMNA EN UNA TABLA, MIN Y MAX VALOR BASADO EN COUNT
+
+SELECT DISTINCT(boarding_no), 
+COUNT(*),
+(SELECT COUNT(*) FROM bookings.boarding_passes bp ) AS cardinality, 
+COUNT(*) * 1.0 / (SELECT COUNT(*) FROM bookings.boarding_passes bp ) * 100 AS percentage
+FROM bookings.boarding_passes bp 
+GROUP BY boarding_no 
+ORDER BY count ASC
+LIMIT 1
