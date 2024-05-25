@@ -35,11 +35,11 @@ CARDINALIDAD (104)
 |bookings|airports_data|city|49|
 |bookings|airports_data|coordinates|16| 
 
-timezone 15.4
-airport_code 4
-airport_name 61.62
-city 49.99
-coordinates 16
+avg_timezone 15.4
+avg_airport_code 4
+avg_airport_name 61.62
+avg_city 49.99
+avg_coordinates 16
 
 |column_name|data_type|
 |-----------|---------|
