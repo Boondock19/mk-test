@@ -19,13 +19,21 @@ WHERE
   table_schema = 'bookings' AND 
   table_name = 'tickets';
 
+
+
+
+
+
+
+TABLA AIRPORTS_DATA
+CARDINALIDAD (104)
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
-|bookings|airports_data|timezone|15|
+|bookings|airports_data|timezone|15| 
 |bookings|airports_data|airport_code|4|
 |bookings|airports_data|airport_name|61|
 |bookings|airports_data|city|49|
-|bookings|airports_data|coordinates|16|
+|bookings|airports_data|coordinates|16| 
 
 timezone 15.4
 airport_code 4
@@ -35,15 +43,17 @@ coordinates 16
 
 |column_name|data_type|
 |-----------|---------|
-|airport_code|character|
-|airport_name|jsonb|
-|city|jsonb|
-|coordinates|point|
+|airport_code|character| NO SE TOMA PARA CARD DIST
+|airport_name|jsonb| NO SE TOMA PARA CARD DIST
+|city|jsonb| NO SE TOMA PARA CARD
+|coordinates|point|NO SE PUEDE CARD DIST PORQUE SON COORD 2D
 |timezone|text|
 
+----------------------------------------------------------------------------
 
 
-
+TABLA BOARDING_PASSES
+CARDINALIDAD (7 925 812)
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|boarding_passes|ticket_no|14|
@@ -51,29 +61,41 @@ coordinates 16
 |bookings|boarding_passes|boarding_no|4|
 |bookings|boarding_passes|seat_no|3|
 
-ticket_no 14
-flight_id 4
-boarding_no 4
-seat_no 3.65
+avg_ticket_no: 14
+avg_flight_id: 4
+avg_boarding_no: 4
+avg_seat_no: 3.65
 
 |column_name|data_type|
 |-----------|---------|
-|ticket_no|character|
-|flight_id|integer|
-|boarding_no|integer|
-|seat_no|character varying|
+|ticket_no|character| NO SE TOMA PARA CARDINALIDAD DISTINTA
+|flight_id|integer| SI SE TOMA  
+|boarding_no|integer| SI SE TOMA
+|seat_no|character varying| NO SE TOMA PARA 
+
+DISTRIBUCION DISTINTA
+flight_id:
+  Id un de los que mas aparece = 1 676 con 381 (0.0048%)
+  Id un de los que menos aparece = 886 con 1 (0.0001%)
+
+boarding_no: 
+  Ticket que aparece menos = 381 con 2 (0.0002%)
+  Ticket que aparece mas veces = 1 con 139 880 (1.76%)
+
+----------------------------------------------------------------------------
 
 
-
+TABLA BOOKINGS
+CARDINALIDAD
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|bookings|book_ref|7|
 |bookings|bookings|book_date|8|
 |bookings|bookings|total_amount|6|
 
-book_ref 7
-book_date 8
-total_amount 6.91
+avg_book_ref: 7
+avg_book_date: 8
+avg_total_amount: 6.91
 
 |column_name|data_type|
 |-----------|---------|
@@ -81,8 +103,10 @@ total_amount 6.91
 |book_date|timestamp with time zone|
 |total_amount|numeric|
 
+----------------------------------------------------------------------------
 
-
+TABLA FLIGHTS
+CARDINALIDAD
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|flights|flight_id|4|
@@ -96,16 +120,16 @@ total_amount 6.91
 |bookings|flights|actual_departure|8|
 |bookings|flights|actual_arrival|8|
 
-flight_id 4
-flight_no 7
-scheduled_departure 8
-scheduled_arrival 8
-departure_airport 4
-arrival_airport 4
-status 8.14
-aircraft_code 4
-actual_departure 8
-actual_arrival 8
+avg_flight_id 4
+avg_flight_no 7
+avg_scheduled_departure 8
+avg_scheduled_arrival 8
+avg_departure_airport 4
+avg_arrival_airport 4
+avg_status 8.14
+avg_aircraft_code 4
+avg_actual_departure 8
+avg_actual_arrival 8
 
 |column_name|data_type|
 |-----------|---------|
@@ -120,7 +144,11 @@ actual_arrival 8
 |actual_departure|timestamp with time zone|
 |actual_arrival|timestamp with time zone|
 
+----------------------------------------------------------------------------
 
+
+TABLA SEATS
+CARDINALIDAD
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|seats|aircraft_code|4|
@@ -131,18 +159,17 @@ avg_aircraft_code: 4
 avg_seat_no: 3.75
 avg_fare_conditions: 8.11
 
-
-
-
-
 |column_name|data_type|
 |-----------|---------|
 |aircraft_code|character|
 |seat_no|character varying|
 |fare_conditions|character varying|
 
+----------------------------------------------------------------------------
 
 
+TABLA TICKET_FLIGHTS
+CARDINALIDAD
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|ticket_flights|ticket_no|14|
@@ -155,7 +182,6 @@ avg_flight_id: 4
 avg_fare_conditions: 8.1
 avg_amount: 6.31
 
-
 |column_name|data_type|
 |-----------|---------|
 |ticket_no|character|
@@ -163,8 +189,11 @@ avg_amount: 6.31
 |fare_conditions|character varying|
 |amount|numeric|
 
+----------------------------------------------------------------------------
 
 
+TABLA TICKETS
+CARDINALIDAD
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|tickets|ticket_no|14|
@@ -173,13 +202,11 @@ avg_amount: 6.31
 |bookings|tickets|passenger_name|16|
 |bookings|tickets|contact_data|55|
 
-
 avg_ticket_no: 14
 avg_book_ref: 7
 avg_passenger_id: 12
 avg_passenger_name: 16.12
 avg_contact_data: 55.48
-
 
 |column_name|data_type|
 |-----------|---------|
@@ -189,7 +216,7 @@ avg_contact_data: 55.48
 |passenger_name|text|
 |contact_data|jsonb|
 
-
+----------------------------------------------------------------------------
 
 FALTA aircrafts_data
 
