@@ -1,15 +1,15 @@
 
 ## Información del  catalago sobre las tablas y sus attt
 
- - Usando el query se obtuvo la data de las tablas en sus catalogos
+### Usando el query se obtuvo la data de las tablas en sus catalogos
 SELECT schemaname,tablename, attname , avg_width FROM pg_stats WHERE schemaname = 'bookings' AND tablename = tablename;
 
-- Usando el query se obtuvo la informacion de cada tabla y sus atributos uno a uno.
+### Usando el query se obtuvo la informacion de cada tabla y sus atributos uno a uno.
 SELECT TRUNC(AVG(pg_column_size(airport_name)),2) 
   AS avg_attr_size
   FROM bookings.boarding_passes;
 
-- Usando el query se obtuvo la informacion de cada tabla y el tipo de dato sus atributos.
+### Usando el query se obtuvo la informacion de cada tabla y el tipo de dato sus atributos.
   SELECT 
   column_name, 
   data_type 
@@ -47,7 +47,7 @@ avg_coordinates 16
 |airport_name|jsonb| NO SE TOMA PARA CARD DIST
 |city|jsonb| NO SE TOMA PARA CARD
 |coordinates|point|NO SE PUEDE CARD DIST PORQUE SON COORD 2D
-|timezone|text|
+|timezone|text| NO SE TOMA PAR CARD DIST
 
 ----------------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ boarding_no:
 
 
 TABLA BOOKINGS
-CARDINALIDAD
+CARDINALIDAD (2 111 110)
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|bookings|book_ref|7|
@@ -99,14 +99,24 @@ avg_total_amount: 6.91
 
 |column_name|data_type|
 |-----------|---------|
-|book_ref|character|
-|book_date|timestamp with time zone|
+|book_ref|character| NO SE TOMA PARA CARD DISNT
+|book_date|timestamp with time zone| NO SE TOMA PARA CARD DIST
 |total_amount|numeric|
+
+DISTRIBUCION DISTINTA 
+total_amount:
+  El monto mayor es un 1 308 700 que aparece 1 (0.00004%)
+  El monto minimo es 3 400 que aparece 427 (0.02%)
+  El promedio es 325 997 
+
+book_date:
+  Valor maximo en cuanto a fecha y hora es 2017-08-15 11:00:00.000 -0400 que aparece 7 (0.00033%)
+  Valor minimo en cuanto a fecha y hora es 2016-07-20 14:16:00.000 -0400 que aparece 1 (0.00005%) 
 
 ----------------------------------------------------------------------------
 
 TABLA FLIGHTS
-CARDINALIDAD
+CARDINALIDAD (214 857)
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|flights|flight_id|4|
@@ -133,22 +143,43 @@ avg_actual_arrival 8
 
 |column_name|data_type|
 |-----------|---------|
-|flight_id|integer|
-|flight_no|character|
+|flight_id|integer| NO SE TOMA PORQUE ES PK
+|flight_no|character| NO SE TOMA 
 |scheduled_departure|timestamp with time zone|
 |scheduled_arrival|timestamp with time zone|
-|departure_airport|character|
-|arrival_airport|character|
-|status|character varying|
-|aircraft_code|character|
+|departure_airport|character| NO SE TOMA
+|arrival_airport|character| NO SE TOMA
+|status|character varying| NO SE TOMA
+|aircraft_code|character| NO SE TOMA 
 |actual_departure|timestamp with time zone|
 |actual_arrival|timestamp with time zone|
+
+DISTRIBUCION DISTINTA:
+
+scheduled_departure:
+  Valor maximo 2017-09-14 13:55:00.000 -0400 que aparece 1 (0.0005%)
+  Valor min 2016-08-14 19:45:00.000 -0400 que aparece 1 (0.0005%)
+
+scheduled_arrival:
+  Valor maximo 2017-09-14 21:55:00.000 -0400 que aparece 1 (0.0005%)
+  Valor mim 2016-08-14 20:35:00.000 -0400 que aparece 1 (0.0005%)
+
+actual_departure:
+  Cardinalida distinta eliminando los nulos (198 519)
+  Valor max 2017-08-15 10:56:00.000 -0400 que aparece 1 (0.0005%)
+  Valor min 2016-08-14 19:46:00.000 -0400 que aparece 1 (0.0005%)
+
+actual_arrival:
+  Cardinalidad dist eliminando los nulos (198 461)
+  Valor max 2017-08-15 11:00:00.000 -0400 que aparece 1 (0.0005%)
+  Valor mim 2016-08-14 20:37:00.000 -0400 que aparece 1 (0.0005%)
+
 
 ----------------------------------------------------------------------------
 
 
 TABLA SEATS
-CARDINALIDAD
+CARDINALIDAD (1 339)
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|seats|aircraft_code|4|
@@ -161,15 +192,15 @@ avg_fare_conditions: 8.11
 
 |column_name|data_type|
 |-----------|---------|
-|aircraft_code|character|
-|seat_no|character varying|
-|fare_conditions|character varying|
+|aircraft_code|character| NO SE TOMA 
+|seat_no|character varying| NO SE TOMA
+|fare_conditions|character varying| NO SE TOMA
 
 ----------------------------------------------------------------------------
 
 
 TABLA TICKET_FLIGHTS
-CARDINALIDAD
+CARDINALIDAD (8 391 952)
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|ticket_flights|ticket_no|14|
@@ -184,16 +215,26 @@ avg_amount: 6.31
 
 |column_name|data_type|
 |-----------|---------|
-|ticket_no|character|
+|ticket_no|character| NO SE TOMA
 |flight_id|integer|
-|fare_conditions|character varying|
+|fare_conditions|character varying| NO SE TOMA
 |amount|numeric|
+
+DISTRIBUCION DISTINTA:
+flight_id:
+  Id que mas aparece = 1 676 con 381 (0.00454%)
+  Id uno de los que menos aparece = 886 con 1 (0.00001%)
+
+amount:
+  Valor max 203 300 que aparece 3 232 (0.0385%)
+  Valor min 3 000 que aparece 58 859 (0.7%)
+  El promedio es 36 2677.45
 
 ----------------------------------------------------------------------------
 
 
 TABLA TICKETS
-CARDINALIDAD
+CARDINALIDAD (2 949 851)
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
 |bookings|tickets|ticket_no|14|
@@ -210,11 +251,11 @@ avg_contact_data: 55.48
 
 |column_name|data_type|
 |-----------|---------|
-|ticket_no|character|
-|book_ref|character|
-|passenger_id|character varying|
-|passenger_name|text|
-|contact_data|jsonb|
+|ticket_no|character| NO SE TOMA
+|book_ref|character| NO SE TOMA 
+|passenger_id|character varying| NO SE TOMA
+|passenger_name|text| NO SE TOMA
+|contact_data|jsonb| NO SE TOMA
 
 ----------------------------------------------------------------------------
 
