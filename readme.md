@@ -49,6 +49,20 @@ avg_coordinates 16
 |coordinates|point|NO SE PUEDE CARD DIST PORQUE SON COORD 2D
 |timezone|text| NO SE TOMA PAR CARD DIST
 
+DISTRIBUCION DISTINTA:
+timezone:
+  Valor mas frecuente es Europe/Moscow con 44 apariciones (42.3077%)
+  Valor menos frecuente es Asia/Anadyr con 1 apariciones (0.9615%)
+
+airport_name:
+  Distribución uniforme 1 aparición (0.9615%) por cada valor
+
+city:
+  Distribución uniforme 1 aparición (0.9615%) por cada valor
+
+coordinates:
+  Distribución uniforme 1 aparición (0.9615%) por cada valor
+
 ----------------------------------------------------------------------------
 
 
@@ -56,8 +70,8 @@ TABLA BOARDING_PASSES
 CARDINALIDAD (7 925 812)
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
-|bookings|boarding_passes|ticket_no|14|
-|bookings|boarding_passes|flight_id|4|
+|bookings|boarding_passes|ticket_no|14| 
+|bookings|boarding_passes|flight_id|4| 
 |bookings|boarding_passes|boarding_no|4|
 |bookings|boarding_passes|seat_no|3|
 
@@ -68,19 +82,26 @@ avg_seat_no: 3.65
 
 |column_name|data_type|
 |-----------|---------|
-|ticket_no|character| NO SE TOMA PARA CARDINALIDAD DISTINTA
-|flight_id|integer| SI SE TOMA  
-|boarding_no|integer| SI SE TOMA
-|seat_no|character varying| NO SE TOMA PARA 
+|ticket_no|character| PKEY
+|flight_id|integer| PKEY 
+|boarding_no|integer| 
+|seat_no|character varying| 
 
 DISTRIBUCION DISTINTA
+ticket_no:
+  Distribución uniforme 1 aparición (0.00001%) por cada valor
+
 flight_id:
-  Id un de los que mas aparece = 1 676 con 381 (0.0048%)
-  Id un de los que menos aparece = 886 con 1 (0.0001%)
+  Valor mas frecuente es 1 676 con 381 apariciones (0.0048%)
+  Valor uno de los que menos frecuente es 886 con 1 apariciones (0.0001%) 
 
 boarding_no: 
-  Ticket que aparece menos = 381 con 2 (0.0002%)
-  Ticket que aparece mas veces = 1 con 139 880 (1.76%)
+  Valor mas frecuente es 1 con 139 800 apariciones (1.76%)
+  Valor menos frecuente es 381 con 2 apariciones (0.0002%)
+
+seat_no:
+  Valor mas frecuente es 3A con 81 034 apariciones (1.0224%)
+  Valor menos frecuente es 49C con 2 678 apariciones (0.03379%)
 
 ----------------------------------------------------------------------------
 
@@ -99,19 +120,21 @@ avg_total_amount: 6.91
 
 |column_name|data_type|
 |-----------|---------|
-|book_ref|character| NO SE TOMA PARA CARD DISNT
+|book_ref|character| PKEY
 |book_date|timestamp with time zone| NO SE TOMA PARA CARD DIST
 |total_amount|numeric|
 
 DISTRIBUCION DISTINTA 
+
 total_amount:
-  El monto mayor es un 1 308 700 que aparece 1 (0.00004%)
-  El monto minimo es 3 400 que aparece 427 (0.02%)
-  El promedio es 325 997 
+  Valor maximo es 1 308 700 con 1 apariciones (0.00004%)
+  Valor minimo es 3 400 que aparece 427 (0.02%)
+  Promedio es 325 997 
 
 book_date:
-  Valor maximo en cuanto a fecha y hora es 2017-08-15 11:00:00.000 -0400 que aparece 7 (0.00033%)
-  Valor minimo en cuanto a fecha y hora es 2016-07-20 14:16:00.000 -0400 que aparece 1 (0.00005%) 
+  Valor maximo es 2017-08-15 11:00:00.000 -0400 con 7 apariciones (0.00033%)
+  Valor minimo es 2016-07-20 14:16:00.000 -0400 con 1 apariciones (0.00005%) 
+  Promedio es 2017-02-05 12:28:00.000 -0400
 
 ----------------------------------------------------------------------------
 
@@ -143,8 +166,8 @@ avg_actual_arrival 8
 
 |column_name|data_type|
 |-----------|---------|
-|flight_id|integer| NO SE TOMA PORQUE ES PK
-|flight_no|character| NO SE TOMA 
+|flight_id|integer| PK
+|flight_no|character| UNIQUE
 |scheduled_departure|timestamp with time zone|
 |scheduled_arrival|timestamp with time zone|
 |departure_airport|character| NO SE TOMA
@@ -155,24 +178,47 @@ avg_actual_arrival 8
 |actual_arrival|timestamp with time zone|
 
 DISTRIBUCION DISTINTA:
+flight_no:
+  Valor uno de los mas frecuente es PG0007 con 396 apariciones (0.18430%)
+  Valor uno de los menos frecuente es PG0001 con 56 apariciones (0.02606%)
+
+departure_airport:
+  Valor mas frecuente es DME con 20 875 apariciones (9.71531%)
+  Valor uno de los menos frecuente es KXK con 113 apariciones (0.05259%)
+
+arrival_airport:
+  Valor mas frecuente es DME con 20 878 apariciones (9.71671%)
+  Valor uno de los menos frecuente es KXK con 113 apariciones (0.05259%)
+
+status:
+  Valor mas frecuente es Arrived con 198 430 apariciones (92.35015%)
+  Valor menos frecuente es Delayed con 41 apariciones (0.01908%)
+
+aircraft_code:
+  Valor mas frecuente es CN1 con 60 196 apariciones (28.01547%)
+  Valor menos frecuente es 773 con 3 960 apariciones (1.8430%)
 
 scheduled_departure:
-  Valor maximo 2017-09-14 13:55:00.000 -0400 que aparece 1 (0.0005%)
-  Valor min 2016-08-14 19:45:00.000 -0400 que aparece 1 (0.0005%)
+  Valor maximo es 2017-09-14 13:55:00.000 -0400 con 1 apariciones (0.0005%)
+  Valor minimo 2016-08-14 19:45:00.000 -0400 con 1 apariciones (0.0005%)
+  Promedio es 2017-02-28 16:50:00.000 -0400
 
 scheduled_arrival:
   Valor maximo 2017-09-14 21:55:00.000 -0400 que aparece 1 (0.0005%)
-  Valor mim 2016-08-14 20:35:00.000 -0400 que aparece 1 (0.0005%)
+  Valor minimo 2016-08-14 20:35:00.000 -0400 que aparece 1 (0.0005%)
+  Promedio es 2017-02-28 21:15:00.000 -0400
 
 actual_departure:
-  Cardinalida distinta eliminando los nulos (198 519)
+  Cardinalidad distinta eliminando los nulos (198 519)
   Valor max 2017-08-15 10:56:00.000 -0400 que aparece 1 (0.0005%)
   Valor min 2016-08-14 19:46:00.000 -0400 que aparece 1 (0.0005%)
+  Promedio es 2017-02-13 15:21:00.000 -0400
 
 actual_arrival:
   Cardinalidad dist eliminando los nulos (198 461)
   Valor max 2017-08-15 11:00:00.000 -0400 que aparece 1 (0.0005%)
   Valor mim 2016-08-14 20:37:00.000 -0400 que aparece 1 (0.0005%)
+  Promedio es 2017-02-13 15:48:30.000 -0400
 
 
 ----------------------------------------------------------------------------
@@ -182,8 +228,8 @@ TABLA SEATS
 CARDINALIDAD (1 339)
 |schemaname|tablename|attname|avg_width|
 |----------|---------|-------|---------|
-|bookings|seats|aircraft_code|4|
-|bookings|seats|seat_no|3|
+|bookings|seats|aircraft_code|4| 
+|bookings|seats|seat_no|3| 
 |bookings|seats|fare_conditions|8|
 
 avg_aircraft_code: 4
@@ -192,9 +238,22 @@ avg_fare_conditions: 8.11
 
 |column_name|data_type|
 |-----------|---------|
-|aircraft_code|character| NO SE TOMA 
-|seat_no|character varying| NO SE TOMA
-|fare_conditions|character varying| NO SE TOMA
+|aircraft_code|character| pkey
+|seat_no|character varying| pkey
+|fare_conditions|character varying|
+
+DISTRIBUCION DISTINTA:
+aircraft_code:
+  Valor mas frecuente es 773 con 402 apariciones (30.02240%)
+  Valor menos frecuente es CN1 con 12 apariciones (0.89619%)
+
+seat_no:
+  Valor uno de los mas frecuente es 1A con 9 apariciones (0.67214%)
+  Valor uno de los menos frecuente es 11K con 1 apariciones (0.07468%)
+
+fare_conditions:
+  Valor mas frecuente es Economy con 1 139 apariciones (85.06348%)
+  Valor menos frecuente es Comfort con 48 apariciones (3.58476%)
 
 ----------------------------------------------------------------------------
 
@@ -215,15 +274,23 @@ avg_amount: 6.31
 
 |column_name|data_type|
 |-----------|---------|
-|ticket_no|character| NO SE TOMA
-|flight_id|integer|
-|fare_conditions|character varying| NO SE TOMA
+|ticket_no|character| pkey
+|flight_id|integer| pkey
+|fare_conditions|character varying| 
 |amount|numeric|
 
 DISTRIBUCION DISTINTA:
+ticket_no:
+  Valor uno de los mas frecuente es 0005432369015 con 6 apariciones (0.00007%)
+  Valor uno de los menos frecuente es 0005432000284 con 1 apariciones (0.00001%)
+
 flight_id:
-  Id que mas aparece = 1 676 con 381 (0.00454%)
-  Id uno de los que menos aparece = 886 con 1 (0.00001%)
+  Valor mas frecuente es 1 676 con 381 apariciones (0.00454%)
+  Valor menos frecuente es 886 con 1 apariciones (0.00001%)
+
+fare_conditions:
+  Valor mas frecuente es Economy con 7 392 231 apariciones (88.08819%)
+  Valor menos frecuente es Comfort con 139 965 apariciones (1.66787%)
 
 amount:
   Valor max 203 300 que aparece 3 232 (0.0385%)
@@ -251,11 +318,26 @@ avg_contact_data: 55.48
 
 |column_name|data_type|
 |-----------|---------|
-|ticket_no|character| NO SE TOMA
-|book_ref|character| NO SE TOMA 
-|passenger_id|character varying| NO SE TOMA
-|passenger_name|text| NO SE TOMA
-|contact_data|jsonb| NO SE TOMA
+|ticket_no|character| PKEY
+|book_ref|character| 
+|passenger_id|character varying| 
+|passenger_name|text| 
+|contact_data|jsonb| 
+
+DISTRIBUCION DISTINTA:
+book_ref:
+  Valor uno de los mas frecuente es 027B0C con 5 apariciones (0.00017%)
+  Valor uno de los menos frecuente es 000004 con 1  apariciones (0.00003%)
+
+passenger_id:
+  Distribución uniforme con 1 apricion (0.00003%)
+
+passenger_name:
+  Valor mas frecuente es ALEKSANDR IVANOV con 6 755 apariciones (0.22899%)
+  Valor uno de los menos frecuente es ADELINA ABRAMOVA con 1 apariciones (0.00003%)
+
+contact_data:
+  Distribución uniforme con 1 apricion (0.00003%)
 
 ----------------------------------------------------------------------------
 
@@ -407,3 +489,18 @@ JIT:
 Execution Time: 16242.642 ms
 
 mejoro aprox 800 ms
+
+
+### MOUSEKERRAMIENTA
+from datetime import datetime, timedelta
+
+# Convertir las fechas a objetos datetime
+fecha1 = datetime.strptime('2017-08-15 11:00:00.000 -0400', '%Y-%m-%d %H:%M:%S.%f %z')
+fecha2 = datetime.strptime('2016-08-14 20:37:00.000 -0400', '%Y-%m-%d %H:%M:%S.%f %z')
+
+# Calcular la diferencia y el punto medio
+diferencia = fecha1 - fecha2
+punto_medio = fecha2 + (diferencia / 2)
+
+# El resultado es el punto medio en formato de fecha
+print(punto_medio)
