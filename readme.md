@@ -749,6 +749,107 @@ JIT:
 Execution Time: 68090.416 ms
 
 
+1- Hash index en book_ref en la tabla tickets
+
+Sort  (cost=4383932.66..4390537.40 rows=2641896 width=103) (actual time=67474.098..68595.481 rows=7925723 loops=1)
+  Sort Key: f.flight_no, bp.boarding_no
+  Sort Method: external merge  Disk: 906456kB
+  ->  Merge Join  (cost=2993581.96..3813172.94 rows=2641896 width=103) (actual time=42252.941..58990.373 rows=7925723 loops=1)
+        Merge Cond: ((tf.ticket_no = bp.ticket_no) AND (tf.flight_id = bp.flight_id))
+        Join Filter: (b.book_date < (f.scheduled_departure - '5 days'::interval))
+        Rows Removed by Join Filter: 89
+        ->  Merge Join  (cost=888428.49..1606612.12 rows=8391960 width=71) (actual time=13745.701..26241.902 rows=8390312 loops=1)
+              Merge Cond: (tf.ticket_no = t.ticket_no)
+              ->  Index Scan using ticket_flights_pkey on ticket_flights tf  (cost=0.56..571324.96 rows=8391960 width=26) (actual time=0.020..9224.188 rows=8390312 loops=1)
+              ->  Sort  (cost=888427.93..895802.18 rows=2949700 width=45) (actual time=13530.804..14164.044 rows=8390312 loops=1)
+                    Sort Key: t.ticket_no
+                    Sort Method: external sort  Disk: 180128kB
+                    ->  Nested Loop  (cost=0.00..389969.15 rows=2949700 width=45) (actual time=0.426..4722.402 rows=2949857 loops=1)
+                          ->  Seq Scan on bookings b  (cost=0.00..34558.10 rows=2111110 width=15) (actual time=0.035..120.252 rows=2111110 loops=1)
+                          ->  Index Scan using q3_book_ref_tickets_hash on tickets t  (cost=0.00..0.15 rows=2 width=37) (actual time=0.002..0.002 rows=1 loops=2111110)
+                                Index Cond: (book_ref = b.book_ref)
+                                Rows Removed by Index Recheck: 0
+        ->  Sort  (cost=2105153.47..2124967.69 rows=7925688 width=68) (actual time=28507.184..29103.307 rows=7925812 loops=1)
+              Sort Key: bp.ticket_no, bp.flight_id
+              Sort Method: external sort  Disk: 698048kB
+              ->  Merge Join  (cost=0.89..546784.73 rows=7925688 width=68) (actual time=0.175..2011.010 rows=7925812 loops=1)
+                    Merge Cond: (bp.flight_id = f.flight_id)
+                    ->  Index Scan using boarding_passes_flight_id_seat_no_key on boarding_passes bp  (cost=0.43..438933.42 rows=7925688 width=25) (actual time=0.144..1202.800 rows=7925812 loops=1)
+                    ->  Index Scan using flights_pkey on flights f  (cost=0.42..8243.54 rows=214867 width=43) (actual time=0.021..31.350 rows=214867 loops=1)
+Planning Time: 2.456 ms
+JIT:
+  Functions: 30
+  Options: Inlining true, Optimization true, Expressions true, Deforming true
+  Timing: Generation 0.796 ms, Inlining 33.993 ms, Optimization 107.947 ms, Emission 72.955 ms, Total 215.691 ms
+Execution Time: 69035.156 ms
+
+2- B tree index en ticket por book_ref
+
+Sort  (cost=4416482.02..4423086.76 rows=2641896 width=103) (actual time=72178.446..73302.128 rows=7925723 loops=1)
+  Sort Key: f.flight_no, bp.boarding_no
+  Sort Method: external merge  Disk: 906456kB
+  ->  Merge Join  (cost=3026294.04..3845722.31 rows=2641896 width=103) (actual time=47451.552..63692.608 rows=7925723 loops=1)
+        Merge Cond: ((tf.ticket_no = bp.ticket_no) AND (tf.flight_id = bp.flight_id))
+        Join Filter: (b.book_date < (f.scheduled_departure - '5 days'::interval))
+        Rows Removed by Join Filter: 89
+        ->  Merge Join  (cost=921140.20..1639161.16 rows=8391960 width=71) (actual time=18970.666..31012.260 rows=8390312 loops=1)
+              Merge Cond: (tf.ticket_no = t.ticket_no)
+              ->  Index Scan using ticket_flights_pkey on ticket_flights tf  (cost=0.56..571162.29 rows=8391960 width=26) (actual time=0.005..8782.974 rows=8390312 loops=1)
+              ->  Sort  (cost=921139.64..928514.19 rows=2949819 width=45) (actual time=18783.472..19431.397 rows=8390312 loops=1)
+                    Sort Key: t.ticket_no
+                    Sort Method: external sort  Disk: 180128kB
+                    ->  Merge Join  (cost=0.95..422660.21 rows=2949819 width=45) (actual time=0.060..8487.120 rows=2949857 loops=1)
+                          Merge Cond: (t.book_ref = b.book_ref)
+                          ->  Index Scan using q3_book_ref_tickets on tickets t  (cost=0.43..271887.24 rows=2949819 width=37) (actual time=0.026..4481.683 rows=2949857 loops=1)
+                          ->  Index Scan using bookings_pkey on bookings b  (cost=0.43..108622.46 rows=2111110 width=15) (actual time=0.023..3103.720 rows=2111110 loops=1)
+        ->  Sort  (cost=2105153.84..2124968.06 rows=7925688 width=68) (actual time=28480.824..29082.799 rows=7925812 loops=1)
+              Sort Key: bp.ticket_no, bp.flight_id
+              Sort Method: external sort  Disk: 698048kB
+              ->  Merge Join  (cost=1.10..546785.10 rows=7925688 width=68) (actual time=0.172..2009.084 rows=7925812 loops=1)
+                    Merge Cond: (bp.flight_id = f.flight_id)
+                    ->  Index Scan using boarding_passes_flight_id_seat_no_key on boarding_passes bp  (cost=0.43..438940.85 rows=7925688 width=25) (actual time=0.144..1195.682 rows=7925812 loops=1)
+                    ->  Index Scan using flights_pkey on flights f  (cost=0.42..8237.78 rows=214867 width=43) (actual time=0.018..27.030 rows=214867 loops=1)
+Planning Time: 1.426 ms
+JIT:
+  Functions: 31
+  Options: Inlining true, Optimization true, Expressions true, Deforming true
+  Timing: Generation 1.008 ms, Inlining 3.566 ms, Optimization 112.976 ms, Emission 70.664 ms, Total 188.213 ms
+Execution Time: 73681.882 ms
+
+
+3- B tree index de book_ref,ticket_no en la tabla de tickets 
+
+Sort  (cost=4444984.75..4451589.49 rows=2641896 width=103) (actual time=72958.053..74095.471 rows=7925723 loops=1)
+  Sort Key: f.flight_no, bp.boarding_no
+  Sort Method: external merge  Disk: 906456kB
+  ->  Merge Join  (cost=3054655.82..3874225.04 rows=2641896 width=103) (actual time=47838.986..64396.699 rows=7925723 loops=1)
+        Merge Cond: ((tf.ticket_no = bp.ticket_no) AND (tf.flight_id = bp.flight_id))
+        Join Filter: (b.book_date < (f.scheduled_departure - '5 days'::interval))
+        Rows Removed by Join Filter: 89
+        ->  Merge Join  (cost=949512.54..1667675.21 rows=8391960 width=71) (actual time=18822.237..31151.448 rows=8390312 loops=1)
+              Merge Cond: (tf.ticket_no = t.ticket_no)
+              ->  Index Scan using ticket_flights_pkey on ticket_flights tf  (cost=0.56..571303.93 rows=8391960 width=26) (actual time=0.005..9051.542 rows=8390312 loops=1)
+              ->  Sort  (cost=949511.98..956886.15 rows=2949670 width=45) (actual time=18635.646..19283.425 rows=8390312 loops=1)
+                    Sort Key: t.ticket_no
+                    Sort Method: external sort  Disk: 180128kB
+                    ->  Merge Join  (cost=0.86..451063.64 rows=2949670 width=45) (actual time=0.059..8513.249 rows=2949857 loops=1)
+                          Merge Cond: (t.book_ref = b.book_ref)
+                          ->  Index Scan using q3_tickets_book_ref_ticket_no on tickets t  (cost=0.43..300291.91 rows=2949670 width=37) (actual time=0.024..4508.768 rows=2949857 loops=1)
+                          ->  Index Scan using bookings_pkey on bookings b  (cost=0.43..108623.08 rows=2111110 width=15) (actual time=0.023..3093.319 rows=2111110 loops=1)
+        ->  Sort  (cost=2105143.28..2124957.50 rows=7925688 width=68) (actual time=29016.693..29611.255 rows=7925812 loops=1)
+              Sort Key: bp.ticket_no, bp.flight_id
+              Sort Method: external sort  Disk: 698048kB
+              ->  Merge Join  (cost=0.89..546774.54 rows=7925688 width=68) (actual time=0.178..2009.146 rows=7925812 loops=1)
+                    Merge Cond: (bp.flight_id = f.flight_id)
+                    ->  Index Scan using boarding_passes_flight_id_seat_no_key on boarding_passes bp  (cost=0.43..438936.37 rows=7925688 width=25) (actual time=0.147..1189.775 rows=7925812 loops=1)
+                    ->  Index Scan using flights_pkey on flights f  (cost=0.42..8238.87 rows=214867 width=43) (actual time=0.018..27.096 rows=214867 loops=1)
+Planning Time: 1.341 ms
+JIT:
+  Functions: 31
+  Options: Inlining true, Optimization true, Expressions true, Deforming true
+  Timing: Generation 0.882 ms, Inlining 3.603 ms, Optimization 112.479 ms, Emission 70.525 ms, Total 187.489 ms
+Execution Time: 74472.284 ms
+
 # QUERIES CUARTA CONSULTA
 
 GroupAggregate  (cost=3201365.20..3881239.40 rows=237732 width=60) (actual time=33352.179..36906.082 rows=218156 loops=1)
