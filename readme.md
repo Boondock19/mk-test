@@ -92,15 +92,15 @@ ticket_no:
   Distribución uniforme 1 aparición (0.00001%) por cada valor
 
 flight_id:
-  Valor mas frecuente es 1 676 con 381 apariciones (0.0048%)
+  Valor mas frecuente es 1 676 con 381 apariciones (0.00481%)
   Valor uno de los que menos frecuente es 886 con 1 apariciones (0.0001%) 
 
 boarding_no: 
-  Valor mas frecuente es 1 con 139 800 apariciones (1.76%)
-  Valor menos frecuente es 381 con 2 apariciones (0.0002%)
+  Valor mas frecuente es 1 con 139 800 apariciones (1.76386%)
+  Valor menos frecuente es 381 con 2 apariciones (0.00003%)
 
 seat_no:
-  Valor mas frecuente es 3A con 81 034 apariciones (1.0224%)
+  Valor mas frecuente es 3A con 81 034 apariciones (1.02241%)
   Valor menos frecuente es 49C con 2 678 apariciones (0.03379%)
 
 ----------------------------------------------------------------------------
@@ -127,8 +127,8 @@ avg_total_amount: 6.91
 DISTRIBUCION DISTINTA 
 
 total_amount:
-  Valor maximo es 1 308 700 con 1 apariciones (0.00004%)
-  Valor minimo es 3 400 que aparece 427 (0.02%)
+  Valor maximo es 1 308 700 con 1 apariciones (0.00005%)
+  Valor minimo es 3 400 que aparece 427 (0.02023%)
   Promedio es 325 997 
 
 book_date:
@@ -199,13 +199,13 @@ aircraft_code:
   Valor menos frecuente es 773 con 3 960 apariciones (1.8430%)
 
 scheduled_departure:
-  Valor maximo es 2017-09-14 13:55:00.000 -0400 con 1 apariciones (0.0005%)
-  Valor minimo 2016-08-14 19:45:00.000 -0400 con 1 apariciones (0.0005%)
+  Valor maximo es 2017-09-14 13:55:00.000 -0400 con 1 apariciones (0.00047%)
+  Valor minimo 2016-08-14 19:45:00.000 -0400 con 1 apariciones (0.00047%)
   Promedio es 2017-02-28 16:50:00.000 -0400
 
 scheduled_arrival:
-  Valor maximo 2017-09-14 21:55:00.000 -0400 que aparece 1 (0.0005%)
-  Valor minimo 2016-08-14 20:35:00.000 -0400 que aparece 1 (0.0005%)
+  Valor maximo 2017-09-14 21:55:00.000 -0400 que aparece 1 (0.00047%)
+  Valor minimo 2016-08-14 20:35:00.000 -0400 que aparece 1 (0.00047%)
   Promedio es 2017-02-28 21:15:00.000 -0400
 
 actual_departure:
