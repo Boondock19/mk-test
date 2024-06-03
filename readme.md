@@ -398,3 +398,64 @@ FROM bookings b WHERE book_date BETWEEN '2016-08-14' AND '2016-12-18'
 GROUP BY book_date) AS q2
 
 
+# query 4
+
+1 - con index b+ en el group by 
+
+GroupAggregate  (cost=11646.10..11661.14 rows=547 width=60) (actual time=30.190..30.412 rows=41 loops=1)
+  Group Key: tf.flight_id, tf.fare_conditions
+  ->  Sort  (cost=11646.10..11647.47 rows=547 width=39) (actual time=30.179..30.225 rows=1428 loops=1)
+        Sort Key: tf.flight_id, tf.fare_conditions
+        Sort Method: quicksort  Memory: 160kB
+        ->  Nested Loop  (cost=1.29..11621.22 rows=547 width=39) (actual time=0.239..29.895 rows=1428 loops=1)
+              ->  Nested Loop  (cost=0.86..11372.15 rows=547 width=39) (actual time=0.231..25.060 rows=1428 loops=1)
+                    ->  Nested Loop  (cost=0.43..11111.52 rows=547 width=32) (actual time=0.220..19.136 rows=1428 loops=1)
+                          ->  Seq Scan on flights f  (cost=0.00..5309.84 rows=14 width=4) (actual time=0.032..15.203 rows=41 loops=1)
+                                Filter: ((status)::text = 'Delayed'::text)
+                                Rows Removed by Filter: 214826
+                          ->  Index Scan using q4_tf_group_by_cover on ticket_flights tf  (cost=0.43..413.36 rows=105 width=32) (actual time=0.007..0.091 rows=35 loops=41)
+                                Index Cond: (flight_id = f.flight_id)
+                    ->  Index Scan using tickets_pkey on tickets t  (cost=0.43..0.48 rows=1 width=21) (actual time=0.004..0.004 rows=1 loops=1428)
+                          Index Cond: (ticket_no = tf.ticket_no)
+              ->  Index Only Scan using bookings_pkey on bookings b  (cost=0.43..0.46 rows=1 width=7) (actual time=0.003..0.003 rows=1 loops=1428)
+                    Index Cond: (book_ref = t.book_ref)
+                    Heap Fetches: 0
+Planning Time: 0.581 ms
+Execution Time: 30.451 ms
+
+
+GroupAggregate  (cost=3201429.74..3881751.77 rows=240912 width=60) (actual time=47495.039..54556.344 rows=218156 loops=1)
+  Group Key: tf.flight_id, tf.fare_conditions
+  ->  Incremental Sort  (cost=3201429.74..3781889.94 rows=7748035 width=39) (actual time=47495.020..52971.250 rows=7920956 loops=1)
+        Sort Key: tf.flight_id, tf.fare_conditions
+        Presorted Key: tf.flight_id
+        Full-sort Groups: 100380  Sort Method: quicksort  Average Memory: 30kB  Peak Memory: 30kB
+        Pre-sorted Groups: 49901  Sort Method: quicksort  Average Memory: 32kB  Peak Memory: 32kB
+        ->  Merge Join  (cost=3201427.37..3330136.98 rows=7748035 width=39) (actual time=47494.943..50190.098 rows=7920956 loops=1)
+              Merge Cond: (f.flight_id = tf.flight_id)
+              ->  Index Scan using flights_pkey on flights f  (cost=0.42..8781.68 rows=198380 width=4) (actual time=166.460..279.506 rows=198430 loops=1)
+                    Filter: ((status)::text = 'Arrived'::text)
+                    Rows Removed by Filter: 16437
+              ->  Sort  (cost=3201422.76..3222402.66 rows=8391960 width=39) (actual time=47328.410..48440.555 rows=8391852 loops=1)
+                    Sort Key: tf.flight_id
+                    Sort Method: external sort  Disk: 438672kB
+                    ->  Merge Join  (cost=1059298.98..1777382.17 rows=8391960 width=39) (actual time=20784.767..40468.205 rows=8391852 loops=1)
+                          Merge Cond: (tf.ticket_no = t.ticket_no)
+                          ->  Index Scan using ticket_flights_pkey on ticket_flights tf  (cost=0.56..571224.52 rows=8391960 width=32) (actual time=0.024..14796.214 rows=8391852 loops=1)
+                          ->  Sort  (cost=1059298.42..1066673.38 rows=2949983 width=21) (actual time=20784.698..21554.457 rows=8391851 loops=1)
+                                Sort Key: t.ticket_no
+                                Sort Method: external sort  Disk: 101072kB
+                                ->  Merge Join  (cost=516927.97..621287.19 rows=2949983 width=21) (actual time=5710.513..7440.553 rows=2949857 loops=1)
+                                      Merge Cond: (b.book_ref = t.book_ref)
+                                      ->  Index Only Scan using bookings_pkey on bookings b  (cost=0.43..54835.08 rows=2111110 width=7) (actual time=0.024..371.743 rows=2111110 loops=1)
+                                            Heap Fetches: 0
+                                      ->  Sort  (cost=516926.06..524301.02 rows=2949983 width=21) (actual time=5710.448..5981.407 rows=2949857 loops=1)
+                                            Sort Key: t.book_ref
+                                            Sort Method: external sort  Disk: 101072kB
+                                            ->  Seq Scan on tickets t  (cost=0.00..78914.83 rows=2949983 width=21) (actual time=0.017..800.732 rows=2949857 loops=1)
+Planning Time: 1.048 ms
+JIT:
+  Functions: 27
+  Options: Inlining true, Optimization true, Expressions true, Deforming true
+  Timing: Generation 0.722 ms, Inlining 36.628 ms, Optimization 78.778 ms, Emission 51.135 ms, Total 167.263 ms
+Execution Time: 54697.346 ms
