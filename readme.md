@@ -294,7 +294,7 @@ fare_conditions:
 
 amount:
   Valor max 203 300 que aparece 3 232 (0.0385%)
-  Valor min 3 000 que aparece 58 859 (0.7%)
+  Valor min 3 000 que aparece 58 859 (0.70137%)
   El promedio es 36 2677.45
 
 ----------------------------------------------------------------------------
@@ -388,7 +388,7 @@ COUNT(*) * 1.0 / (SELECT COUNT(*) FROM bookings b) * 100 AS percentage
 FROM bookings b WHERE b.total_amount  > 50000
 GROUP BY total_amount) AS q2;
 
-# QUERY PARA SACAR EL PORCENTAJE DE LAS FECHAS ENTRE '2016-08-14' AND '2016-12-18'
+# QUERY PARA SACAR EL FACTOR REDUCTOR ENTRE DE LAS FECHAS 
 
 SELECT SUM(percentage) AS total_percentage FROM
 (SELECT DISTINCT(book_date),
