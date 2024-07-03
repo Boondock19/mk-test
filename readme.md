@@ -394,7 +394,8 @@ SELECT SUM(percentage) AS total_percentage FROM
 (SELECT DISTINCT(book_date),
 (SELECT COUNT(*)FROM bookings b ) AS cardinality, 
 COUNT(*) * 1.0 / (SELECT COUNT(*) FROM bookings b) * 100 AS percentage
-FROM bookings b WHERE book_date BETWEEN '2016-08-14' AND '2016-12-18'
+FROM bookings b WHERE book_date BETWEEN '2017-01-26' AND
+'2017-06-26'
 GROUP BY book_date) AS q2
 
 
