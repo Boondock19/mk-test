@@ -1,0 +1,193 @@
+[
+  {
+    "Plan": {
+      "Node Type": "Aggregate",
+      "Strategy": "Sorted",
+      "Partial Mode": "Simple",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Startup Cost": 1458252.97,
+      "Total Cost": 1531138.34,
+      "Plan Rows": 3688,
+      "Plan Width": 39,
+      "Actual Startup Time": 4701.920,
+      "Actual Total Time": 27576.648,
+      "Actual Rows": 1199,
+      "Actual Loops": 1,
+      "Group Key": ["f.aircraft_code", "s.seat_no"],
+      "Plans": [
+        {
+          "Node Type": "Merge Join",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Join Type": "Inner",
+          "Startup Cost": 1458252.97,
+          "Total Cost": 1506828.29,
+          "Plan Rows": 3235193,
+          "Plan Width": 13,
+          "Actual Startup Time": 4694.389,
+          "Actual Total Time": 19372.954,
+          "Actual Rows": 110338099,
+          "Actual Loops": 1,
+          "Inner Unique": false,
+          "Merge Cond": "(s.aircraft_code = f.aircraft_code)",
+          "Plans": [
+            {
+              "Node Type": "Index Only Scan",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Scan Direction": "Forward",
+              "Index Name": "seats_pkey",
+              "Relation Name": "seats",
+              "Alias": "s",
+              "Startup Cost": 0.28,
+              "Total Cost": 44.36,
+              "Plan Rows": 1339,
+              "Plan Width": 7,
+              "Actual Startup Time": 0.010,
+              "Actual Total Time": 1.270,
+              "Actual Rows": 1339,
+              "Actual Loops": 1,
+              "Heap Fetches": 0
+            },
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Inner",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 1458252.69,
+              "Total Cost": 1458357.54,
+              "Plan Rows": 41942,
+              "Plan Width": 10,
+              "Actual Startup Time": 4604.460,
+              "Actual Total Time": 10429.208,
+              "Actual Rows": 110338003,
+              "Actual Loops": 1,
+              "Sort Key": ["f.aircraft_code"],
+              "Sort Method": "external sort",
+              "Sort Space Used": 16704,
+              "Sort Space Type": "Disk",
+              "Plans": [
+                {
+                  "Node Type": "Merge Join",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Join Type": "Inner",
+                  "Startup Cost": 1412660.40,
+                  "Total Cost": 1455032.36,
+                  "Plan Rows": 41942,
+                  "Plan Width": 10,
+                  "Actual Startup Time": 3595.499,
+                  "Actual Total Time": 4454.685,
+                  "Actual Rows": 700759,
+                  "Actual Loops": 1,
+                  "Inner Unique": false,
+                  "Merge Cond": "(f.flight_id = tf.flight_id)",
+                  "Plans": [
+                    {
+                      "Node Type": "Sort",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Startup Cost": 6989.41,
+                      "Total Cost": 6992.09,
+                      "Plan Rows": 1074,
+                      "Plan Width": 8,
+                      "Actual Startup Time": 25.892,
+                      "Actual Total Time": 26.681,
+                      "Actual Rows": 17360,
+                      "Actual Loops": 1,
+                      "Sort Key": ["f.flight_id"],
+                      "Sort Method": "quicksort",
+                      "Sort Space Used": 1582,
+                      "Sort Space Type": "Memory",
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Relation Name": "flights",
+                          "Alias": "f",
+                          "Startup Cost": 0.00,
+                          "Total Cost": 6935.34,
+                          "Plan Rows": 1074,
+                          "Plan Width": 8,
+                          "Actual Startup Time": 0.043,
+                          "Actual Total Time": 24.036,
+                          "Actual Rows": 17360,
+                          "Actual Loops": 1,
+                          "Filter": "((date(scheduled_departure) >= '2017-01-26'::date) AND (date(scheduled_departure) <= '2017-02-26'::date))",
+                          "Rows Removed by Filter": 197507
+                        }
+                      ]
+                    },
+                    {
+                      "Node Type": "Sort",
+                      "Parent Relationship": "Inner",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Startup Cost": 1405666.80,
+                      "Total Cost": 1426644.58,
+                      "Plan Rows": 8391110,
+                      "Plan Width": 10,
+                      "Actual Startup Time": 3569.535,
+                      "Actual Total Time": 4074.471,
+                      "Actual Rows": 8391457,
+                      "Actual Loops": 1,
+                      "Sort Key": ["tf.flight_id"],
+                      "Sort Method": "external sort",
+                      "Sort Space Used": 213568,
+                      "Sort Space Type": "Disk",
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Relation Name": "ticket_flights",
+                          "Alias": "tf",
+                          "Startup Cost": 0.00,
+                          "Total Cost": 153860.10,
+                          "Plan Rows": 8391110,
+                          "Plan Width": 10,
+                          "Actual Startup Time": 0.068,
+                          "Actual Total Time": 589.310,
+                          "Actual Rows": 8391852,
+                          "Actual Loops": 1
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Planning Time": 0.176,
+    "Triggers": [
+    ],
+    "JIT": {
+      "Functions": 21,
+      "Options": {
+        "Inlining": true,
+        "Optimization": true,
+        "Expressions": true,
+        "Deforming": true
+      },
+      "Timing": {
+        "Generation": 0.669,
+        "Inlining": 5.227,
+        "Optimization": 51.691,
+        "Emission": 33.013,
+        "Total": 90.600
+      }
+    },
+    "Execution Time": 27595.249
+  }
+]

@@ -1,0 +1,115 @@
+[
+    {
+      "Plan": {
+        "Node Type": "Limit",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 0.86,
+        "Total Cost": 293431.64,
+        "Plan Rows": 2000,
+        "Plan Width": 56,
+        "Actual Startup Time": 4.284,
+        "Actual Total Time": 1719.376,
+        "Actual Rows": 2000,
+        "Actual Loops": 1,
+        "Plans": [
+          {
+            "Node Type": "Aggregate",
+            "Strategy": "Sorted",
+            "Partial Mode": "Simple",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 0.86,
+            "Total Cost": 1525694.22,
+            "Plan Rows": 10399,
+            "Plan Width": 56,
+            "Actual Startup Time": 0.694,
+            "Actual Total Time": 1715.569,
+            "Actual Rows": 2000,
+            "Actual Loops": 1,
+            "Group Key": ["t.passenger_name"],
+            "Plans": [
+              {
+                "Node Type": "Nested Loop",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Join Type": "Inner",
+                "Startup Cost": 0.86,
+                "Total Cost": 1503437.32,
+                "Plan Rows": 2950255,
+                "Plan Width": 29,
+                "Actual Startup Time": 0.392,
+                "Actual Total Time": 1634.113,
+                "Actual Rows": 303060,
+                "Actual Loops": 1,
+                "Inner Unique": true,
+                "Plans": [
+                  {
+                    "Node Type": "Index Only Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "q3_t_passenger_name_book_ref",
+                    "Relation Name": "tickets",
+                    "Alias": "t",
+                    "Startup Cost": 0.43,
+                    "Total Cost": 106190.25,
+                    "Plan Rows": 2950255,
+                    "Plan Width": 23,
+                    "Actual Startup Time": 0.041,
+                    "Actual Total Time": 38.449,
+                    "Actual Rows": 303060,
+                    "Actual Loops": 1,
+                    "Heap Fetches": 36
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "Inner",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "bookings_pkey",
+                    "Relation Name": "bookings",
+                    "Alias": "b",
+                    "Startup Cost": 0.43,
+                    "Total Cost": 0.47,
+                    "Plan Rows": 1,
+                    "Plan Width": 13,
+                    "Actual Startup Time": 0.005,
+                    "Actual Total Time": 0.005,
+                    "Actual Rows": 1,
+                    "Actual Loops": 303060,
+                    "Index Cond": "(book_ref = t.book_ref)",
+                    "Rows Removed by Index Recheck": 0
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "Planning Time": 0.598,
+      "Triggers": [
+      ],
+      "JIT": {
+        "Functions": 9,
+        "Options": {
+          "Inlining": false,
+          "Optimization": false,
+          "Expressions": true,
+          "Deforming": true
+        },
+        "Timing": {
+          "Generation": 0.220,
+          "Inlining": 0.000,
+          "Optimization": 0.157,
+          "Emission": 3.441,
+          "Total": 3.818
+        }
+      },
+      "Execution Time": 1731.967
+    }
+  ]

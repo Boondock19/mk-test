@@ -1,0 +1,138 @@
+[
+    {
+      "Plan": {
+        "Node Type": "Sort",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 788515.46,
+        "Total Cost": 789592.92,
+        "Plan Rows": 430981,
+        "Plan Width": 44,
+        "Actual Startup Time": 5953.747,
+        "Actual Total Time": 5953.769,
+        "Actual Rows": 392,
+        "Actual Loops": 1,
+        "Sort Key": ["(count(DISTINCT t.passenger_id)) DESC", "(sum(b.total_amount)) DESC"],
+        "Sort Method": "quicksort",
+        "Sort Space Used": 55,
+        "Sort Space Type": "Memory",
+        "Plans": [
+          {
+            "Node Type": "Aggregate",
+            "Strategy": "Sorted",
+            "Partial Mode": "Simple",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 698959.37,
+            "Total Cost": 734923.54,
+            "Plan Rows": 430981,
+            "Plan Width": 44,
+            "Actual Startup Time": 3114.507,
+            "Actual Total Time": 5953.451,
+            "Actual Rows": 392,
+            "Actual Loops": 1,
+            "Group Key": ["(date(b.book_date))"],
+            "Plans": [
+              {
+                "Node Type": "Sort",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 698959.37,
+                "Total Cost": 706334.23,
+                "Plan Rows": 2949945,
+                "Plan Width": 22,
+                "Actual Startup Time": 3114.444,
+                "Actual Total Time": 3316.416,
+                "Actual Rows": 2949857,
+                "Actual Loops": 1,
+                "Sort Key": ["(date(b.book_date))"],
+                "Sort Method": "external merge",
+                "Sort Space Used": 95136,
+                "Sort Space Type": "Disk",
+                "Plans": [
+                  {
+                    "Node Type": "Merge Join",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Join Type": "Inner",
+                    "Startup Cost": 0.86,
+                    "Total Cost": 260959.50,
+                    "Plan Rows": 2949945,
+                    "Plan Width": 22,
+                    "Actual Startup Time": 61.211,
+                    "Actual Total Time": 2428.233,
+                    "Actual Rows": 2949857,
+                    "Actual Loops": 1,
+                    "Inner Unique": false,
+                    "Merge Cond": "(b.book_ref = t.book_ref)",
+                    "Plans": [
+                      {
+                        "Node Type": "Index Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Scan Direction": "Forward",
+                        "Index Name": "bookings_pkey",
+                        "Relation Name": "bookings",
+                        "Alias": "b",
+                        "Startup Cost": 0.43,
+                        "Total Cost": 108674.94,
+                        "Plan Rows": 2111110,
+                        "Plan Width": 21,
+                        "Actual Startup Time": 0.017,
+                        "Actual Total Time": 1039.132,
+                        "Actual Rows": 2111110,
+                        "Actual Loops": 1
+                      },
+                      {
+                        "Node Type": "Index Only Scan",
+                        "Parent Relationship": "Inner",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Scan Direction": "Forward",
+                        "Index Name": "q5_t_book_ref_passenger_id",
+                        "Relation Name": "tickets",
+                        "Alias": "t",
+                        "Startup Cost": 0.43,
+                        "Total Cost": 102757.60,
+                        "Plan Rows": 2949945,
+                        "Plan Width": 19,
+                        "Actual Startup Time": 0.025,
+                        "Actual Total Time": 304.454,
+                        "Actual Rows": 2949857,
+                        "Actual Loops": 1,
+                        "Heap Fetches": 401
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "Planning Time": 0.371,
+      "Triggers": [
+      ],
+      "JIT": {
+        "Functions": 10,
+        "Options": {
+          "Inlining": true,
+          "Optimization": true,
+          "Expressions": true,
+          "Deforming": true
+        },
+        "Timing": {
+          "Generation": 0.424,
+          "Inlining": 6.723,
+          "Optimization": 32.377,
+          "Emission": 22.078,
+          "Total": 61.602
+        }
+      },
+      "Execution Time": 5964.381
+    }
+  ]

@@ -1,0 +1,330 @@
+[
+  {
+    "Plan": {
+      "Node Type": "Sort",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Startup Cost": 225410.48,
+      "Total Cost": 225410.77,
+      "Plan Rows": 116,
+      "Plan Width": 60,
+      "Actual Startup Time": 116.146,
+      "Actual Total Time": 116.152,
+      "Actual Rows": 8,
+      "Actual Loops": 1,
+      "Sort Key": ["(count(DISTINCT tf.flight_id)) DESC"],
+      "Sort Method": "quicksort",
+      "Sort Space Used": 25,
+      "Sort Space Type": "Memory",
+      "Plans": [
+        {
+          "Node Type": "Result",
+          "Parent Relationship": "InitPlan",
+          "Subplan Name": "InitPlan 2 (returns $1)",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 0.63,
+          "Total Cost": 0.64,
+          "Plan Rows": 1,
+          "Plan Width": 32,
+          "Actual Startup Time": 0.040,
+          "Actual Total Time": 0.043,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Plans": [
+            {
+              "Node Type": "Limit",
+              "Parent Relationship": "InitPlan",
+              "Subplan Name": "InitPlan 1 (returns $0)",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 0.56,
+              "Total Cost": 0.63,
+              "Plan Rows": 1,
+              "Plan Width": 6,
+              "Actual Startup Time": 0.033,
+              "Actual Total Time": 0.035,
+              "Actual Rows": 1,
+              "Actual Loops": 1,
+              "Plans": [
+                {
+                  "Node Type": "Index Only Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Scan Direction": "Backward",
+                  "Index Name": "q1_tf_amount_ticket_no",
+                  "Relation Name": "ticket_flights",
+                  "Alias": "tf_1",
+                  "Startup Cost": 0.56,
+                  "Total Cost": 575643.55,
+                  "Plan Rows": 8391390,
+                  "Plan Width": 6,
+                  "Actual Startup Time": 0.030,
+                  "Actual Total Time": 0.031,
+                  "Actual Rows": 1,
+                  "Actual Loops": 1,
+                  "Index Cond": "(amount IS NOT NULL)",
+                  "Rows Removed by Index Recheck": 0,
+                  "Heap Fetches": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Node Type": "Aggregate",
+          "Strategy": "Sorted",
+          "Partial Mode": "Simple",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 225396.32,
+          "Total Cost": 225405.86,
+          "Plan Rows": 116,
+          "Plan Width": 60,
+          "Actual Startup Time": 115.172,
+          "Actual Total Time": 116.144,
+          "Actual Rows": 8,
+          "Actual Loops": 1,
+          "Group Key": ["t.passenger_name"],
+          "Filter": "(count(DISTINCT tf.flight_id) > 3)",
+          "Rows Removed by Filter": 1084,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 225396.32,
+              "Total Cost": 225397.19,
+              "Plan Rows": 347,
+              "Plan Width": 30,
+              "Actual Startup Time": 115.094,
+              "Actual Total Time": 115.179,
+              "Actual Rows": 2459,
+              "Actual Loops": 1,
+              "Sort Key": ["t.passenger_name"],
+              "Sort Method": "quicksort",
+              "Sort Space Used": 289,
+              "Sort Space Type": "Memory",
+              "Plans": [
+                {
+                  "Node Type": "Merge Join",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Join Type": "Inner",
+                  "Startup Cost": 225025.99,
+                  "Total Cost": 225381.68,
+                  "Plan Rows": 347,
+                  "Plan Width": 30,
+                  "Actual Startup Time": 107.992,
+                  "Actual Total Time": 113.171,
+                  "Actual Rows": 2459,
+                  "Actual Loops": 1,
+                  "Inner Unique": true,
+                  "Merge Cond": "(bp.flight_id = f.flight_id)",
+                  "Plans": [
+                    {
+                      "Node Type": "Sort",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Startup Cost": 218036.57,
+                      "Total Cost": 218210.00,
+                      "Plan Rows": 69371,
+                      "Plan Width": 34,
+                      "Actual Startup Time": 70.778,
+                      "Actual Total Time": 71.388,
+                      "Actual Rows": 5978,
+                      "Actual Loops": 1,
+                      "Sort Key": ["bp.flight_id"],
+                      "Sort Method": "quicksort",
+                      "Sort Space Used": 660,
+                      "Sort Space Type": "Memory",
+                      "Plans": [
+                        {
+                          "Node Type": "Nested Loop",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Join Type": "Inner",
+                          "Startup Cost": 717.65,
+                          "Total Cost": 210561.44,
+                          "Plan Rows": 69371,
+                          "Plan Width": 34,
+                          "Actual Startup Time": 11.104,
+                          "Actual Total Time": 69.571,
+                          "Actual Rows": 5978,
+                          "Actual Loops": 1,
+                          "Inner Unique": false,
+                          "Plans": [
+                            {
+                              "Node Type": "Nested Loop",
+                              "Parent Relationship": "Outer",
+                              "Parallel Aware": false,
+                              "Async Capable": false,
+                              "Join Type": "Inner",
+                              "Startup Cost": 717.09,
+                              "Total Cost": 190620.60,
+                              "Plan Rows": 25820,
+                              "Plan Width": 54,
+                              "Actual Startup Time": 10.699,
+                              "Actual Total Time": 32.257,
+                              "Actual Rows": 3232,
+                              "Actual Loops": 1,
+                              "Inner Unique": true,
+                              "Plans": [
+                                {
+                                  "Node Type": "Bitmap Heap Scan",
+                                  "Parent Relationship": "Outer",
+                                  "Parallel Aware": false,
+                                  "Async Capable": false,
+                                  "Relation Name": "ticket_flights",
+                                  "Alias": "tf",
+                                  "Startup Cost": 716.66,
+                                  "Total Cost": 51726.15,
+                                  "Plan Rows": 25820,
+                                  "Plan Width": 24,
+                                  "Actual Startup Time": 10.671,
+                                  "Actual Total Time": 12.929,
+                                  "Actual Rows": 3232,
+                                  "Actual Loops": 1,
+                                  "Recheck Cond": "(amount = $1)",
+                                  "Rows Removed by Index Recheck": 0,
+                                  "Exact Heap Blocks": 683,
+                                  "Lossy Heap Blocks": 0,
+                                  "Plans": [
+                                    {
+                                      "Node Type": "Bitmap Index Scan",
+                                      "Parent Relationship": "Outer",
+                                      "Parallel Aware": false,
+                                      "Async Capable": false,
+                                      "Index Name": "q1_tf_amount_ticket_no",
+                                      "Startup Cost": 0.00,
+                                      "Total Cost": 710.21,
+                                      "Plan Rows": 25820,
+                                      "Plan Width": 0,
+                                      "Actual Startup Time": 10.598,
+                                      "Actual Total Time": 10.599,
+                                      "Actual Rows": 3232,
+                                      "Actual Loops": 1,
+                                      "Index Cond": "(amount = $1)"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Node Type": "Index Scan",
+                                  "Parent Relationship": "Inner",
+                                  "Parallel Aware": false,
+                                  "Async Capable": false,
+                                  "Scan Direction": "Forward",
+                                  "Index Name": "tickets_pkey",
+                                  "Relation Name": "tickets",
+                                  "Alias": "t",
+                                  "Startup Cost": 0.43,
+                                  "Total Cost": 5.38,
+                                  "Plan Rows": 1,
+                                  "Plan Width": 30,
+                                  "Actual Startup Time": 0.006,
+                                  "Actual Total Time": 0.006,
+                                  "Actual Rows": 1,
+                                  "Actual Loops": 3232,
+                                  "Index Cond": "(ticket_no = tf.ticket_no)",
+                                  "Rows Removed by Index Recheck": 0
+                                }
+                              ]
+                            },
+                            {
+                              "Node Type": "Index Scan",
+                              "Parent Relationship": "Inner",
+                              "Parallel Aware": false,
+                              "Async Capable": false,
+                              "Scan Direction": "Forward",
+                              "Index Name": "boarding_passes_pkey",
+                              "Relation Name": "boarding_passes",
+                              "Alias": "bp",
+                              "Startup Cost": 0.56,
+                              "Total Cost": 0.74,
+                              "Plan Rows": 3,
+                              "Plan Width": 22,
+                              "Actual Startup Time": 0.009,
+                              "Actual Total Time": 0.011,
+                              "Actual Rows": 2,
+                              "Actual Loops": 3232,
+                              "Index Cond": "(ticket_no = t.ticket_no)",
+                              "Rows Removed by Index Recheck": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Node Type": "Sort",
+                      "Parent Relationship": "Inner",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Startup Cost": 6989.41,
+                      "Total Cost": 6992.09,
+                      "Plan Rows": 1074,
+                      "Plan Width": 4,
+                      "Actual Startup Time": 36.636,
+                      "Actual Total Time": 39.300,
+                      "Actual Rows": 45470,
+                      "Actual Loops": 1,
+                      "Sort Key": ["f.flight_id"],
+                      "Sort Method": "external merge",
+                      "Sort Space Used": 1136,
+                      "Sort Space Type": "Disk",
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Relation Name": "flights",
+                          "Alias": "f",
+                          "Startup Cost": 0.00,
+                          "Total Cost": 6935.34,
+                          "Plan Rows": 1074,
+                          "Plan Width": 4,
+                          "Actual Startup Time": 0.040,
+                          "Actual Total Time": 29.081,
+                          "Actual Rows": 82462,
+                          "Actual Loops": 1,
+                          "Filter": "((date(scheduled_departure) >= '2017-01-26'::date) AND (date(scheduled_departure) <= '2017-06-26'::date))",
+                          "Rows Removed by Filter": 132405
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Planning Time": 1.064,
+    "Triggers": [
+    ],
+    "JIT": {
+      "Functions": 34,
+      "Options": {
+        "Inlining": false,
+        "Optimization": false,
+        "Expressions": true,
+        "Deforming": true
+      },
+      "Timing": {
+        "Generation": 0.789,
+        "Inlining": 0.000,
+        "Optimization": 0.403,
+        "Emission": 10.014,
+        "Total": 11.206
+      }
+    },
+    "Execution Time": 117.245
+  }
+]

@@ -1,0 +1,135 @@
+[
+    {
+      "Plan": {
+        "Node Type": "Aggregate",
+        "Strategy": "Sorted",
+        "Partial Mode": "Simple",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 1133343.89,
+        "Total Cost": 1162972.44,
+        "Plan Rows": 10243,
+        "Plan Width": 56,
+        "Actual Startup Time": 11144.894,
+        "Actual Total Time": 13063.337,
+        "Actual Rows": 34323,
+        "Actual Loops": 1,
+        "Group Key": ["t.passenger_name"],
+        "Plans": [
+          {
+            "Node Type": "Sort",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 1133343.89,
+            "Total Cost": 1140719.02,
+            "Plan Rows": 2950051,
+            "Plan Width": 29,
+            "Actual Startup Time": 11144.837,
+            "Actual Total Time": 11443.683,
+            "Actual Rows": 2949857,
+            "Actual Loops": 1,
+            "Sort Key": ["t.passenger_name"],
+            "Sort Method": "external merge",
+            "Sort Space Used": 115672,
+            "Sort Space Type": "Disk",
+            "Plans": [
+              {
+                "Node Type": "Merge Join",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Join Type": "Inner",
+                "Startup Cost": 516958.45,
+                "Total Cost": 675157.86,
+                "Plan Rows": 2950051,
+                "Plan Width": 29,
+                "Actual Startup Time": 5450.276,
+                "Actual Total Time": 7552.179,
+                "Actual Rows": 2949857,
+                "Actual Loops": 1,
+                "Inner Unique": false,
+                "Merge Cond": "(b.book_ref = t.book_ref)",
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "bookings_pkey",
+                    "Relation Name": "bookings",
+                    "Alias": "b",
+                    "Startup Cost": 0.43,
+                    "Total Cost": 108674.26,
+                    "Plan Rows": 2111110,
+                    "Plan Width": 13,
+                    "Actual Startup Time": 0.005,
+                    "Actual Total Time": 1121.674,
+                    "Actual Rows": 2111110,
+                    "Actual Loops": 1
+                  },
+                  {
+                    "Node Type": "Sort",
+                    "Parent Relationship": "Inner",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Startup Cost": 516956.54,
+                    "Total Cost": 524331.67,
+                    "Plan Rows": 2950051,
+                    "Plan Width": 23,
+                    "Actual Startup Time": 5370.281,
+                    "Actual Total Time": 5575.267,
+                    "Actual Rows": 2949857,
+                    "Actual Loops": 1,
+                    "Sort Key": ["t.book_ref"],
+                    "Sort Method": "external sort",
+                    "Sort Space Used": 107200,
+                    "Sort Space Type": "Disk",
+                    "Plans": [
+                      {
+                        "Node Type": "Seq Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Relation Name": "tickets",
+                        "Alias": "t",
+                        "Startup Cost": 0.00,
+                        "Total Cost": 78937.51,
+                        "Plan Rows": 2950051,
+                        "Plan Width": 23,
+                        "Actual Startup Time": 0.028,
+                        "Actual Total Time": 255.107,
+                        "Actual Rows": 2949857,
+                        "Actual Loops": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "Planning Time": 0.336,
+      "Triggers": [
+      ],
+      "JIT": {
+        "Functions": 14,
+        "Options": {
+          "Inlining": true,
+          "Optimization": true,
+          "Expressions": true,
+          "Deforming": true
+        },
+        "Timing": {
+          "Generation": 0.484,
+          "Inlining": 5.505,
+          "Optimization": 46.796,
+          "Emission": 27.692,
+          "Total": 80.478
+        }
+      },
+      "Execution Time": 13086.058
+    }
+  ]

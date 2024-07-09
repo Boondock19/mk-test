@@ -1,0 +1,255 @@
+[
+    {
+      "Plan": {
+        "Node Type": "Sort",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 451663.13,
+        "Total Cost": 451663.42,
+        "Plan Rows": 116,
+        "Plan Width": 60,
+        "Actual Startup Time": 27870.674,
+        "Actual Total Time": 27870.678,
+        "Actual Rows": 8,
+        "Actual Loops": 1,
+        "Sort Key": ["(count(DISTINCT tf.flight_id)) DESC"],
+        "Sort Method": "quicksort",
+        "Sort Space Used": 25,
+        "Sort Space Type": "Memory",
+        "Plans": [
+          {
+            "Node Type": "Aggregate",
+            "Strategy": "Plain",
+            "Partial Mode": "Simple",
+            "Parent Relationship": "InitPlan",
+            "Subplan Name": "InitPlan 1 (returns $0)",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 174855.01,
+            "Total Cost": 174855.02,
+            "Plan Rows": 1,
+            "Plan Width": 32,
+            "Actual Startup Time": 1019.281,
+            "Actual Total Time": 1019.283,
+            "Actual Rows": 1,
+            "Actual Loops": 1,
+            "Plans": [
+              {
+                "Node Type": "Seq Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "ticket_flights",
+                "Alias": "tf_1",
+                "Startup Cost": 0.00,
+                "Total Cost": 153873.81,
+                "Plan Rows": 8392481,
+                "Plan Width": 6,
+                "Actual Startup Time": 0.010,
+                "Actual Total Time": 481.965,
+                "Actual Rows": 8391852,
+                "Actual Loops": 1
+              }
+            ]
+          },
+          {
+            "Node Type": "Aggregate",
+            "Strategy": "Sorted",
+            "Partial Mode": "Simple",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 276794.59,
+            "Total Cost": 276804.13,
+            "Plan Rows": 116,
+            "Plan Width": 60,
+            "Actual Startup Time": 27869.704,
+            "Actual Total Time": 27870.650,
+            "Actual Rows": 8,
+            "Actual Loops": 1,
+            "Group Key": ["t.passenger_name"],
+            "Filter": "(count(DISTINCT tf.flight_id) > 3)",
+            "Rows Removed by Filter": 1084,
+            "Plans": [
+              {
+                "Node Type": "Sort",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 276794.59,
+                "Total Cost": 276795.46,
+                "Plan Rows": 347,
+                "Plan Width": 30,
+                "Actual Startup Time": 27869.553,
+                "Actual Total Time": 27869.644,
+                "Actual Rows": 2459,
+                "Actual Loops": 1,
+                "Sort Key": ["t.passenger_name"],
+                "Sort Method": "quicksort",
+                "Sort Space Used": 289,
+                "Sort Space Type": "Memory",
+                "Plans": [
+                  {
+                    "Node Type": "Nested Loop",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Join Type": "Inner",
+                    "Startup Cost": 1.42,
+                    "Total Cost": 276779.95,
+                    "Plan Rows": 347,
+                    "Plan Width": 30,
+                    "Actual Startup Time": 2583.421,
+                    "Actual Total Time": 27867.275,
+                    "Actual Rows": 2459,
+                    "Actual Loops": 1,
+                    "Inner Unique": true,
+                    "Join Filter": "(tf.ticket_no = t.ticket_no)",
+                    "Rows Removed by Join Filter": 0,
+                    "Plans": [
+                      {
+                        "Node Type": "Nested Loop",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Join Type": "Inner",
+                        "Startup Cost": 0.99,
+                        "Total Cost": 276583.67,
+                        "Plan Rows": 400,
+                        "Plan Width": 42,
+                        "Actual Startup Time": 2583.393,
+                        "Actual Total Time": 27857.457,
+                        "Actual Rows": 2459,
+                        "Actual Loops": 1,
+                        "Inner Unique": false,
+                        "Plans": [
+                          {
+                            "Node Type": "Nested Loop",
+                            "Parent Relationship": "Outer",
+                            "Parallel Aware": false,
+                            "Async Capable": false,
+                            "Join Type": "Inner",
+                            "Startup Cost": 0.43,
+                            "Total Cost": 249396.83,
+                            "Plan Rows": 39614,
+                            "Plan Width": 18,
+                            "Actual Startup Time": 11.025,
+                            "Actual Total Time": 1010.003,
+                            "Actual Rows": 3331781,
+                            "Actual Loops": 1,
+                            "Inner Unique": false,
+                            "Plans": [
+                              {
+                                "Node Type": "Seq Scan",
+                                "Parent Relationship": "Outer",
+                                "Parallel Aware": false,
+                                "Async Capable": false,
+                                "Relation Name": "flights",
+                                "Alias": "f",
+                                "Startup Cost": 0.00,
+                                "Total Cost": 6935.34,
+                                "Plan Rows": 1074,
+                                "Plan Width": 4,
+                                "Actual Startup Time": 10.993,
+                                "Actual Total Time": 65.229,
+                                "Actual Rows": 82462,
+                                "Actual Loops": 1,
+                                "Filter": "((date(scheduled_departure) >= '2017-01-26'::date) AND (date(scheduled_departure) <= '2017-06-26'::date))",
+                                "Rows Removed by Filter": 132405
+                              },
+                              {
+                                "Node Type": "Index Scan",
+                                "Parent Relationship": "Inner",
+                                "Parallel Aware": false,
+                                "Async Capable": false,
+                                "Scan Direction": "Forward",
+                                "Index Name": "boarding_passes_flight_id_seat_no_key",
+                                "Relation Name": "boarding_passes",
+                                "Alias": "bp",
+                                "Startup Cost": 0.43,
+                                "Total Cost": 224.19,
+                                "Plan Rows": 157,
+                                "Plan Width": 22,
+                                "Actual Startup Time": 0.003,
+                                "Actual Total Time": 0.008,
+                                "Actual Rows": 40,
+                                "Actual Loops": 82462,
+                                "Index Cond": "(flight_id = f.flight_id)",
+                                "Rows Removed by Index Recheck": 0
+                              }
+                            ]
+                          },
+                          {
+                            "Node Type": "Index Scan",
+                            "Parent Relationship": "Inner",
+                            "Parallel Aware": false,
+                            "Async Capable": false,
+                            "Scan Direction": "Forward",
+                            "Index Name": "ticket_flights_pkey",
+                            "Relation Name": "ticket_flights",
+                            "Alias": "tf",
+                            "Startup Cost": 0.56,
+                            "Total Cost": 0.68,
+                            "Plan Rows": 1,
+                            "Plan Width": 24,
+                            "Actual Startup Time": 0.008,
+                            "Actual Total Time": 0.008,
+                            "Actual Rows": 0,
+                            "Actual Loops": 3331781,
+                            "Index Cond": "(ticket_no = bp.ticket_no)",
+                            "Rows Removed by Index Recheck": 0,
+                            "Filter": "(amount = $0)",
+                            "Rows Removed by Filter": 3
+                          }
+                        ]
+                      },
+                      {
+                        "Node Type": "Index Scan",
+                        "Parent Relationship": "Inner",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Scan Direction": "Forward",
+                        "Index Name": "tickets_pkey",
+                        "Relation Name": "tickets",
+                        "Alias": "t",
+                        "Startup Cost": 0.43,
+                        "Total Cost": 0.48,
+                        "Plan Rows": 1,
+                        "Plan Width": 30,
+                        "Actual Startup Time": 0.004,
+                        "Actual Total Time": 0.004,
+                        "Actual Rows": 1,
+                        "Actual Loops": 2459,
+                        "Index Cond": "(ticket_no = bp.ticket_no)",
+                        "Rows Removed by Index Recheck": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "Planning Time": 1.589,
+      "Triggers": [
+      ],
+      "JIT": {
+        "Functions": 30,
+        "Options": {
+          "Inlining": false,
+          "Optimization": false,
+          "Expressions": true,
+          "Deforming": true
+        },
+        "Timing": {
+          "Generation": 0.819,
+          "Inlining": 0.000,
+          "Optimization": 0.396,
+          "Emission": 10.630,
+          "Total": 11.845
+        }
+      },
+      "Execution Time": 27885.077
+    }
+  ]
